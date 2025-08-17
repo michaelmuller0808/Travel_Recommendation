@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TravelBloom - Discover Your Next Adventure</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            color: white;
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #ffd700;
+        }
+
+        .search-container {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .search-input {
+            padding: 0.5rem;
+            border: none;
+            border-radius: 5px;
+            width: 200px;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn-search {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .btn-reset {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .btn:hover {
+            opacity: 0.8;
+        }
+
+        .page {
+            display: none;
+            min-height: 100vh;
+            padding-top: 80px;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .hero {
+            height: 100vh;
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=1200') center/cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .social-icons a {
+            color: white;
+            font-size: 1.5rem;
+            padding: 0.5rem;
+            border: 2px solid white;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .social-icons a:hover {
+            background-color: white;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .about-section, .team-section {
+            margin-bottom: 3rem;
+        }
+
+        .about-section h2, .team-section h2 {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #667eea;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .team-member {
+            text-align: center;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .contact-form {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .form-group textarea {
+            height: 120px;
+            resize: vertical;
+        }
+
+        .btn-submit {
+            background-color: #667eea;
+            color: white;
+            padding: 0.75rem 2rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            width: 100%;
+        }
+
+        .results-container {
+            margin-top: 2rem;
+        }
+
+        .recommendation-card {
+            display: flex;
+            margin-bottom: 2rem;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .recommendation-card img {
+            width: 300px;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .card-content {
+            padding: 1.5rem;
+            flex: 1;
+        }
+
+        .card-content h3 {
+            color: #667eea;
+            margin-bottom: 1rem;
+        }
+
+        .time-display {
+            background-color: #f8f9fa;
+            padding: 0.5rem;
+            border-radius: 5px;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .search-container {
+                flex-direction: column;
+            }
+
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .recommendation-card {
+                flex-direction: column;
+            }
+
+            .recommendation-card img {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">TravelBloom</div>
+            <ul class="nav-links">
+                <li><a href="#" onclick="showPage('home')">Home</a></li>
+                <li><a href="#" onclick="showPage('about')">About Us</a></li>
+                <li><a href="#" onclick="showPage('contact')">Contact Us</a></li>
+                <li class="search-container" id="searchContainer">
+                    <input type="text" class="search-input" id="searchInput" placeholder="Search destinations...">
+                    <button class="btn btn-search" onclick="searchRecommendations()">Search</button>
+                    <button class="btn btn-reset" onclick="clearResults()">Reset</button>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Home Page -->
+    <div id="home" class="page active">
+        <div class="hero">
+            <div class="hero-content">
+                <h1>Discover Your Next Adventure</h1>
+                <p>Explore breathtaking destinations, ancient temples, and pristine beaches around the world. Let us help you find your perfect getaway.</p>
+                <div class="social-icons">
+                    <a href="#" title="Facebook">f</a>
+                    <a href="#" title="Twitter">t</a>
+                    <a href="#" title="Instagram">i</a>
+                    <a href="#" title="YouTube">y</a>
+                </div>
+            </div>
+        </div>
+        <div class="results-container" id="resultsContainer"></div>
+    </div>
+
+    <!-- About Us Page -->
+    <div id="about" class="page">
+        <div class="container">
+            <div class="about-section">
+                <h2>About TravelBloom</h2>
+                <p>TravelBloom is your premier destination for discovering the world's most incredible travel experiences. Founded with a passion for exploration and adventure, we curate the finest destinations, from bustling cities to serene temples and pristine beaches.</p>
+                <p>Our mission is to inspire and guide travelers to create unforgettable memories while exploring the diverse beauty our planet has to offer. Whether you're seeking cultural immersion, spiritual enlightenment, or pure relaxation, we're here to help you find your perfect journey.</p>
+            </div>
+            
+            <div class="team-section">
+                <h2>Our Team</h2>
+                <div class="team-grid">
+                    <div class="team-member">
+                        <h3>Sarah Johnson</h3>
+                        <p><strong>CEO & Founder</strong></p>
+                        <p>Travel enthusiast with 15+ years of experience in the tourism industry.</p>
+                    </div>
+                    <div class="team-member">
+                        <h3>Michael Chen</h3>
+                        <p><strong>Head of Operations</strong></p>
+                        <p>Expert in destination management and customer experience optimization.</p>
+                    </div>
+                    <div class="team-member">
+                        <h3>Emily Rodriguez</h3>
+                        <p><strong>Travel Curator</strong></p>
+                        <p>Specialist in discovering hidden gems and authentic cultural experiences.</p>
+                    </div>
+                    <div class="team-member">
+                        <h3>David Kim</h3>
+                        <p><strong>Technology Director</strong></p>
+                        <p>Passionate about creating seamless digital travel experiences.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Us Page -->
+    <div id="contact" class="page">
+        <div class="container">
+            <h2 style="text-align: center; margin-bottom: 2rem; color: #667eea;">Contact Us</h2>
+            <form class="contact-form" onsubmit="submitForm(event)">
+                <div class="form-group">
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="message">Message:</label>
+                    <textarea id="message" name="message" required placeholder="Tell us how we can help you..."></textarea>
+                </div>
+                <button type="submit" class="btn-submit">Submit</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let travelData = null;
+
+        // Load travel data on page load
+        async function loadTravelData() {
+            try {
+                const response = await fetch('travel_recommendation_api.json');
+                travelData = await response.json();
+                console.log('Travel data loaded:', travelData);
+            } catch (error) {
+                console.error('Error loading travel data:', error);
+            }
+        }
+
+        // Show specific page
+        function showPage(pageId) {
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => page.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+
+            // Hide search container on about and contact pages
+            const searchContainer = document.getElementById('searchContainer');
+            if (pageId === 'about' || pageId === 'contact') {
+                searchContainer.style.display = 'none';
+            } else {
+                searchContainer.style.display = 'flex';
+            }
+        }
+
+        // Search recommendations
+        function searchRecommendations() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+            if (!searchTerm || !travelData) return;
+
+            let results = [];
+
+            // Check for beach keywords
+            if (searchTerm.includes('beach') || searchTerm.includes('beaches')) {
+                results = travelData.beaches;
+            }
+            // Check for temple keywords
+            else if (searchTerm.includes('temple') || searchTerm.includes('temples')) {
+                results = travelData.temples;
+            }
+            // Check for country keywords
+            else if (searchTerm.includes('country') || searchTerm.includes('countries')) {
+                results = [];
+                travelData.countries.forEach(country => {
+                    results = results.concat(country.cities);
+                });
+            }
+            // Check specific country names
+            else {
+                travelData.countries.forEach(country => {
+                    if (country.name.toLowerCase().includes(searchTerm)) {
+                        results = results.concat(country.cities);
+                    }
+                });
+            }
+
+            displayResults(results);
+        }
+
+        // Display search results
+        function displayResults(results) {
+            const resultsContainer = document.getElementById('resultsContainer');
+            
+            if (results.length === 0) {
+                resultsContainer.innerHTML = '<div class="container"><p>No recommendations found. Try searching for "beach", "temple", or "country".</p></div>';
+                return;
+            }
+
+            let html = '<div class="container"><h2 style="text-align: center; margin-bottom: 2rem; color: #667eea;">Recommended Destinations</h2>';
+            
+            results.forEach(item => {
+                const timeZone = getTimeZone(item.name);
+                const currentTime = getCurrentTime(timeZone);
+                
+                html += `
+                    <div class="recommendation-card">
+                        <img src="${item.imageUrl}" alt="${item.name}">
+                        <div class="card-content">
+                            <h3>${item.name}</h3>
+                            <p>${item.description}</p>
+                            ${currentTime ? `<div class="time-display">Current local time: ${currentTime}</div>` : ''}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            resultsContainer.innerHTML = html;
+        }
+
+        // Get timezone for a location
+        function getTimeZone(locationName) {
+            const timeZones = {
+                'Sydney': 'Australia/Sydney',
+                'Melbourne': 'Australia/Melbourne',
+                'Tokyo': 'Asia/Tokyo',
+                'Kyoto': 'Asia/Tokyo',
+                'Rio de Janeiro': 'America/Sao_Paulo',
+                'São Paulo': 'America/Sao_Paulo',
+                'Cambodia': 'Asia/Phnom_Penh',
+                'India': 'Asia/Kolkata',
+                'French Polynesia': 'Pacific/Tahiti',
+                'Brazil': 'America/Sao_Paulo'
+            };
+
+            for (const [key, zone] of Object.entries(timeZones)) {
+                if (locationName.includes(key)) {
+                    return zone;
+                }
+            }
+            return null;
+        }
+
+        // Get current time for timezone
+        function getCurrentTime(timeZone) {
+            if (!timeZone) return null;
+            
+            try {
+                const options = { 
+                    timeZone: timeZone, 
+                    hour12: true, 
+                    hour: 'numeric', 
+                    minute: 'numeric', 
+                    second: 'numeric' 
+                };
+                return new Date().toLocaleTimeString('en-US', options);
+            } catch (error) {
+                console.error('Error getting time for timezone:', timeZone, error);
+                return null;
+            }
+        }
+
+        // Clear search results
+        function clearResults() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('resultsContainer').innerHTML = '';
+        }
+
+        // Submit contact form
+        function submitForm(event) {
+            event.preventDefault();
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const message = document.getElementById('message').value;
+            
+            alert(`Thank you, ${name}! Your message has been received. We'll get back to you at ${email} soon.`);
+            
+            // Reset form
+            document.getElementById('name').value = '';
+            document.getElementById('email').value = '';
+            document.getElementById('message').value = '';
+        }
+
+        // Load data when page loads
+        window.addEventListener('load', loadTravelData);
+    </script>
+</body>
+</html>
